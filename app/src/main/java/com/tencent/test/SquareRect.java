@@ -11,5 +11,4 @@ public class SquareRect extends BaseRect{
     public void onClick(SquareRect rect){
         title.set("厉害厉害");
     }
-
 }
