@@ -1,15 +1,10 @@
 package com.tencent.test
 
 import android.content.Context
-import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.tencent.test.rect.databinding.SquareBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -43,34 +38,33 @@ class MainActivity : AppCompatActivity() {
     private fun initLayoutManager(){
         recycler_view.layoutManager = StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL)
         var datas = ArrayList<BaseRect>()
-        for (i in 1..10){
+        for (i in 1..5){
             var rect = SquareRect()
             rect.title.set("美股快迭")
+            rect.image.set("https://y.gtimg.cn/music/common/upload/t_movie_h5/260358.jpg")
+            datas.add(rect)
+        }
+        for (i in 1..5){
+            var rect = HorizontalRect()
+            rect.title.set("美股快迭")
+            rect.image.set("https://y.gtimg.cn/music/common/upload/t_movie_h5/259169.jpg")
             datas.add(rect)
         }
         recycler_view.adapter = TvAdapter(this,datas)
     }
 
-    private class TvAdapter(context : Context,val data : ArrayList<BaseRect>) : RecyclerView.Adapter<TvViewHolder>(){
-        var layoutInflater = LayoutInflater.from(context)
-
-        override fun onBindViewHolder(holder: TvViewHolder?, position: Int) {
-            if (position < itemCount)holder?.bind(getItemForPosition(position))
-
+    private class TvAdapter(context : Context,val data : ArrayList<BaseRect>) : BaseTvAdapter(context){
+        override fun getLayoutIdForPosition(position: Int): Int {
+            return data[position].getLayoutId()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TvViewHolder {
-            return TvViewHolder(SquareBinding.inflate(layoutInflater,parent,false))
+        override fun getItemForPosition(position : Int) : BaseRect{
+            return data[position]
         }
 
         override fun getItemCount(): Int {
              return data.size
         }
-
-        private fun getItemForPosition(position : Int) : BaseRect{
-            return data[position]
-        }
-
     }
 
 }
